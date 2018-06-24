@@ -23,22 +23,7 @@
         var canvas = document.getElementById("canvas");
         var gc = canvas.getContext("2d");
         var data = map(12,12);
-        render(data,gc);
-
-        create();
-        function create(){
-            var arr = mold();
-            for(var i = 0;i < arr.length; i++){
-                for(var j = 0; j < arr[i].length; j++){
-                    data[i][j + 4] = arr[i][j];
-                }
-            }
-            render(data,gc);
-        }
-
-        function mold(){
-            var num = Math.floor(Math.random()*7);
-            var arr = [
+        var arr = [
                 [[1,1,1,1]],
                 [[1,1],[1,1]],
                 [[1,1,0],[0,1,1]],
@@ -47,6 +32,44 @@
                 [[1,0,0],[1,1,1]],
                 [[0,0,1],[1,1,1]]
             ];
+        var y = 0;
+        var matrix = mold();
+        render(data,gc);
+        setInterval(function(){
+           fall();
+        },500);
+        create(matrix);
+
+        function fall(){
+            if(y + matrix.length > data.length){
+                y = 0;
+                matrix = mold();
+            }
+            clearPre(matrix);
+            y++;
+            create(matrix);
+        }
+
+        function clearPre(arr){
+            for(var i = 0; i < arr.length; i++){
+                for(var j = 0; j < arr[i].length; j++){
+                    data[i + y][j + 4] = 0;
+                }
+            }
+        }
+
+        function create(arr){
+            for(var i = 0;i < arr.length; i++){
+                for(var j = 0; j < arr[i].length; j++){
+                    data[i+y][j + 4] = arr[i][j];
+                }
+            }
+            render(data,gc);
+        }
+
+        function mold(){
+            var num = Math.floor(Math.random()*7);
+
             return arr[num];
         }
         function render(data,gc){
