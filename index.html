@@ -41,13 +41,28 @@
         create(matrix);
 
         function fall(){
-            if(y + matrix.length > data.length){
+            if(collideTest()){
                 y = 0;
                 matrix = mold();
             }
             clearPre(matrix);
             y++;
             create(matrix);
+        }
+
+        function collideTest(){
+            var len = matrix.length;
+            if(y+len >= data.length){
+                return true;
+            }
+            for(var i = len -1; i < len; i++){
+                for(var j = 0; j < matrix[i].length; j++){
+					if(matrix[i][j]&&data[i+y+1][j+4] == 1){
+						return true;
+					} 
+                }
+            }
+            return false;
         }
 
         function clearPre(arr){
