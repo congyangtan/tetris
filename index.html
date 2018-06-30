@@ -32,14 +32,41 @@
                 [[1,0,0],[1,1,1]],
                 [[0,0,1],[1,1,1]]
             ];
+        var x = 4;
         var y = 0;
         var matrix = mold();
         render(data,gc);
         setInterval(function(){
            fall();
         },500);
+        play();
         create(matrix);
-
+        function play(){
+            document.onkeydown = function(ev){
+                switch(ev.keyCode){
+                    case 37://向左移动
+                    clearPre(matrix);
+                    x--;
+                    if(x<0){
+                        x = 0;
+                    }
+                    create(matrix);
+                    break;
+                    case 39: //向右移动
+                    clearPre(matrix);
+                    x++;
+                    if(x+matrix[0].length >= data[0].length){
+                        x = data[0].length - matrix[0].length;
+                    }
+                    create(matrix);
+                    break;
+                    case 38: //方块变形
+                    break;
+                    case 40: //加速向下移动
+                    break;
+                }
+            }
+        }
         function fall(){
             if(collideTest()){
                 y = 0;
@@ -68,7 +95,7 @@
         function clearPre(arr){
             for(var i = 0; i < arr.length; i++){
                 for(var j = 0; j < arr[i].length; j++){
-                    data[i + y][j + 4] = 0;
+                    data[i + y][j + x] = 0;
                 }
             }
         }
@@ -76,7 +103,7 @@
         function create(arr){
             for(var i = 0;i < arr.length; i++){
                 for(var j = 0; j < arr[i].length; j++){
-                    data[i+y][j + 4] = arr[i][j];
+                    data[i+y][j + x] = arr[i][j];
                 }
             }
             render(data,gc);
