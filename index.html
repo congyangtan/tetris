@@ -34,14 +34,19 @@
             ];
         var x = 4;
         var y = 0;
+        var timer = null;
+        var onOff = false;
         var matrix = mold();
         render(data,gc);
-        setInterval(function(){
-           fall();
-        },500);
+        auto(400);
         play();
         create(matrix);
-
+        
+        function auto(time){
+            timer = setInterval(function(){
+                fall();
+            },time);
+        }
         function rotate(){
             var arr = [];
             var y = matrix.length;
@@ -83,7 +88,19 @@
                     create(matrix);
                     break;
                     case 40: //加速向下移动
+                    if(onOff) return;
+                    onOff = true;
+                    clearInterval(timer);
+                    auto(100);
                     break;
+                }
+            }
+
+            document.onkeyup = function(ev){
+                if(ev.keyCode == 40){
+                    onOff = false;
+                    clearInterval(timer);
+                    auto(400);
                 }
             }
         }
