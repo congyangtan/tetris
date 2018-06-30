@@ -41,6 +41,23 @@
         },500);
         play();
         create(matrix);
+
+        function rotate(){
+            var arr = [];
+            var y = matrix.length;
+            var x = matrix[0].length;
+
+            for(var i = 0; i < x; i ++){
+                arr.push([]);
+            }
+
+            for(var i = 0; i < y; i++){
+                for(var j = 0; j < x; j++){
+                    arr[j][y-1-i] = matrix[i][j];
+                }
+            }
+            matrix = arr;
+        }
         function play(){
             document.onkeydown = function(ev){
                 switch(ev.keyCode){
@@ -60,7 +77,10 @@
                     }
                     create(matrix);
                     break;
-                    case 38: //方块变形
+                    case 38: //
+                    clearPre(matrix);
+                    rotate();
+                    create(matrix);
                     break;
                     case 40: //加速向下移动
                     break;
