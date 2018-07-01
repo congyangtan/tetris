@@ -107,6 +107,7 @@
         function fall(){
             if(collideTest()){
                 y = 0;
+                x = 4;
                 matrix = mold();
             }
             clearPre(matrix);
@@ -119,11 +120,24 @@
             if(y+len >= data.length){
                 return true;
             }
-            for(var i = len -1; i < len; i++){
+//之前的检测方法
+/*            for(var i = len -1; i < len; i++){
                 for(var j = 0; j < matrix[i].length; j++){
 					if(matrix[i][j]&&data[i+y+1][j+4] == 1){
 						return true;
 					} 
+                }
+            }*/
+            var arr = matrix[len-1];
+            var n;
+            for(var i = 0; i < arr.length; i++){
+                n = len-1;
+                while(!matrix[n][i]){
+                    n--;
+                }
+
+                if(data[y+1+n][x+i]){
+                    return true;
                 }
             }
             return false;
@@ -132,7 +146,10 @@
         function clearPre(arr){
             for(var i = 0; i < arr.length; i++){
                 for(var j = 0; j < arr[i].length; j++){
-                    data[i + y][j + x] = 0;
+//                    data[i + y][j + x] = 0;
+                    if(arr[i][j]){ //只消除方块为1的地方，0的地方不清除
+                        data[i + y][j + x] = 0;
+                    }
                 }
             }
         }
