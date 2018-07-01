@@ -65,6 +65,9 @@
                     arr[j][y-1-i] = matrix[i][j];
                 }
             }
+            if(collideTestX(1,arr)||collideTestX(-1,arr)||collideTest(arr)){
+				return;
+			}
             matrix = arr;
         }
         function play(){
@@ -72,17 +75,23 @@
                 switch(ev.keyCode){
                     case 37://向左移动
                     clearPre(matrix);
-                    x--;
+                   /* x--;
                     if(x<0){
                         x = 0;
+                    }*/
+                    if(!collideTestX(-1,matrix)){
+                        x--;
                     }
                     create(matrix);
                     break;
                     case 39: //向右移动
                     clearPre(matrix);
-                    x++;
+                    /*x++;
                     if(x+matrix[0].length >= data[0].length){
                         x = data[0].length - matrix[0].length;
+                    }*/
+                    if(!collideTestX(1,matrix)){
+                        x++;
                     }
                     create(matrix);
                     break;
@@ -108,8 +117,41 @@
                 }
             }
         }
+
+        //左右移动的过程中，如果碰撞了边缘或者碰撞其他方块就返回true，否则false
+		function collideTestX(n,matrix1){
+			//n是负1就是向左，1是向右；
+			var maxX = data[0].length - matrix1[0].length;
+			//碰到边界
+			if(x+n<0||x+n>maxX){
+				return true;
+			}
+			//检测左右移动时是否碰到方块。
+            if(n < 0){
+                for(var i = 0; i < matrix1.length; i++){
+                    var index = 0;
+                    while(!matrix1[i][index]){
+                        index++;
+                    }
+                    if(!data[i+y] || data[i+y][x+index-1]){
+                        return true;
+                    }
+                }
+            }else{
+                for(var i=0;i<matrix1.length;i++){
+					var index = matrix1[0].length;
+					while(!matrix1[i][index]){
+						index--;
+					}
+					if(!data[i+y]||data[i+y][x+index+1]){
+						return true;
+					}
+				}
+            }
+            return false;
+        }
         function fall(){
-            if(collideTest()){
+            if(collideTest(matrix)){
                 clearLine();
                 y = 0;
                 x = 4;
@@ -136,8 +178,8 @@
                 }
             }
         }
-        function collideTest(){
-            var len = matrix.length;
+        function collideTest(matrix1){
+            var len = matrix1.length;
             if(y+len >= data.length){
                 return true;
             }
@@ -149,11 +191,11 @@
 					} 
                 }
             }*/
-            var arr = matrix[len-1];
+            var arr = matrix1[len-1];
             var n;
             for(var i = 0; i < arr.length; i++){
                 n = len-1;
-                while(!matrix[n][i]){
+                while(!matrix1[n][i]){
                     n--;
                 }
 
